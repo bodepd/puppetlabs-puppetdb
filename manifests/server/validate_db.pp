@@ -53,12 +53,17 @@ class puppetdb::server::validate_db(
 
   # We don't need any validation for the embedded database, presumably.
   if ($database == 'postgres') {
+
+    anchor { 'puppetdb_server_validate_db_before': } ->
+
     class { '::postgresql::validate_db_connection':
       database_host     => $database_host,
       database_port     => $database_port,
       database_username => $database_username,
       database_password => $database_password,
       database_name     => $database_name,
-    }
+    } ->
+
+    anchor { 'puppetdb_server_validate_db_after': }
   }
 }
