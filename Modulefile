@@ -8,5 +8,5 @@ license 'Apache'
 project_page 'https://github.com/puppetlabs-puppet/puppetlabs-puppetdb'
 
 dependency 'cprice404/inifile', '>= 0.9.0'
-dependency 'puppetlabs/postgresql', '>= 1.0.1'
+dependency 'puppetlabs/postgresql', '>= 1.0.0'
 dependency 'puppetlabs/firewall', '>= 0.0.1'
