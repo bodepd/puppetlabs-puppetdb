@@ -110,7 +110,8 @@ class puppetdb(
   $open_postgres_port        = $puppetdb::params::open_postgres_port,
   $manage_redhat_firewall    = $puppetdb::params::manage_redhat_firewall,
   $confdir                   = $puppetdb::params::confdir,
-  $java_args                 = {}
+  $java_args                 = {},
+  $setup_ssl_certs           = false,
 ) inherits puppetdb::params {
 
   # Apply necessary suffix if zero is specified.
@@ -169,6 +170,7 @@ class puppetdb(
     manage_redhat_firewall => $manage_redhat_firewall,
     confdir                => $confdir,
     java_args              => $java_args,
+    setup_ssl_certs        => $setup_ssl_certs,
   }
 
   if ($database == 'postgres') {

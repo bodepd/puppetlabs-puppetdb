@@ -86,6 +86,10 @@
 #                            options specified in PuppetDB package.
 #                            (defaults to `{}`).
 #                            e.g. { '-Xmx' => '512m', '-Xms' => '256m' }
+#   ['setup_ssl_certs'] - Indicates that the certificates for puppetdb should be
+#                         initialized using the puppetdb-ssl-setup script.
+#                         (defaults to false)
+#
 # Actions:
 # - Creates and manages a puppetdb server
 #
@@ -119,7 +123,8 @@ class puppetdb::server(
   $puppetdb_service        = $puppetdb::params::puppetdb_service,
   $manage_redhat_firewall  = $puppetdb::params::manage_redhat_firewall,
   $confdir                 = $puppetdb::params::confdir,
-  $java_args               = {}
+  $java_args               = {},
+  $setup_ssl_certs         = false
 ) inherits puppetdb::params {
 
   # Apply necessary suffix if zero is specified.
@@ -204,6 +209,15 @@ class puppetdb::server(
           notify => Service[$puppetdb_service],
         })
     )
+  }
+
+  if $setup_ssl_certs {
+    exec { 'puppetdb-ssl-setup':
+      path    => ['/usr/sbin/', '/usr/bin', '/bin'],
+      creates => '/etc/puppetdb/ssl/',
+      require => Class['puppetdb::server::jetty_ini'],
+      notify  => Service[$puppetdb_service]
+    }
   }
 
   service { $puppetdb_service:
